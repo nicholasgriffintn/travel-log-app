@@ -141,9 +141,10 @@ try {
     res.status(statusCode).send(message);
   });
 
-  const PORT = 80;
-
-  app.listen(PORT, () => console.info(`Server running on port ${PORT}`));
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Our app is running on port ${PORT}`);
+  });
 } catch (err) {
   console.error(err);
 }
