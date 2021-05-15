@@ -137,3 +137,7 @@ footer.App-footer .App-footer-flex {
 .App-MapWrap .mapboxgl-ctrl-bottom-left {
   bottom: 38px !important;
 }
+
+.marker.red {
+  fill: #d83131;
+}
