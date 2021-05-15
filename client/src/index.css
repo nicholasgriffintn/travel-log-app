@@ -59,7 +59,7 @@ header.App-header > div {
 }
 
 .btn-primary {
-  background: #57c1df;
+  background: #4a89f3;
 }
 
 .btn-primary:hover {
@@ -180,4 +180,9 @@ footer.App-footer .App-footer-flex {
   text-align: center;
   margin: 0 auto;
   display: block;
+}
+
+.form-item-wrap {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
