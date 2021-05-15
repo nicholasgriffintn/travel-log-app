@@ -20,9 +20,14 @@
         "concurrently": "^6.1.0",
         "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
+        "dynazord": "^1.1.0",
         "express": "^4.17.1",
+        "express-rate-limit": "^5.2.6",
         "helmet": "^4.6.0",
         "hpp": "^0.2.3",
-        "morgan": "^1.10.0"
+        "http-assert": "^1.4.1",
+        "morgan": "^1.10.0",
+        "uuid": "^8.3.2",
+        "validator": "^13.6.0"
     }
 }

@@ -117,6 +117,11 @@ try {
     });
   });
 
+  // Controller for logs
+  const logs = require('./controllers/logs');
+
+  defaultRoute.use('/logs', logs);
+
   // Add the default route to the /api endpoint
   app.use('/api', defaultRoute);
 

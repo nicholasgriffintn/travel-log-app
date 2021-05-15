@@ -54,3 +54,26 @@ header.App-header > div {
 .btn-secondary:hover {
   background: #000;
 }
+
+.App-MapWrap header.App-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+}
+.App-MapWrap header.App-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+}
+
+.App-MapWrap header.App-header .App-header-flex {
+  background: #fbf8f37a;
+}
+
+.App-MapWrap .overlays {
+  top: 80px;
+}
