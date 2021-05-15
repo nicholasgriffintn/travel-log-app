@@ -1,2 +1,3 @@
-# travel-log-app
-An Express JS React app that uses Postgres and AWS Location to log travel spots
+# Express / React Starter App for services
+
+For getting started with a new Express / React server in no time at all.
