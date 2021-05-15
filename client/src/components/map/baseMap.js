@@ -62,7 +62,7 @@ const BaseMap = () => {
           console.debug('Position changed => ', position);
         }}
       />
-      <NavigationControl style={navControlStyle} />
+      <NavigationControl showCompass={false} style={navControlStyle} />
       {logEntries.map((entry) => (
         <React.Fragment key={entry._id}>
           <Marker latitude={entry.latitude} longitude={entry.longitude}>

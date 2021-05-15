@@ -77,3 +77,22 @@ header.App-header > div {
 .App-MapWrap .overlays {
   top: 80px;
 }
+
+.App-MapWrap .auth_box {
+  padding-top: 120px;
+}
+
+.App-MapWrap .auth_box .auth_form {
+  background: #fff;
+}
+
+span.error_message {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: calc(100% - 30px);
+  display: inline-block;
+  padding: 10px 15px;
+  background: #d24f4f;
+  border-radius: 4px;
+  color: #fff;
+}

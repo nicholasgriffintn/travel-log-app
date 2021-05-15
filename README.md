@@ -7,6 +7,8 @@ This is a simple app that uses the AWS Location service and DynamoDB with AWS Co
 - [x] Initialise Server and Client
 - [x] Iniegrate ininital DynamoDB models
 - [x] Add a map in with location tracking
+- [x] Swap map to AWS Location map with authentication
+- [] Add none logged in message
 - [] Add a form for adding a new travel log destination
   - [] Form should use AWS Location geocoding so you can type in an address and get a lat long
   - [] Should be able to click the map to add a location

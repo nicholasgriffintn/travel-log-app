@@ -4,8 +4,7 @@ import { Box, Flex, Link } from 'rebass';
 
 import logo from './logo.svg';
 import './App.css';
-import HealthCheck from './components/health-check';
-import BaseMap from './components/map/baseMap';
+import AWSMap from './components/map/awsMap';
 
 import AmplifyReduxAuth from './components/auth/Wrapper';
 
@@ -25,13 +24,15 @@ class AppInner extends Component {
               >
                 <img src={logo} className="App-logo" alt="logo" />
                 <Box mx="auto" />
-                <AmplifyReduxAuth></AmplifyReduxAuth>
+                <AmplifyReduxAuth header={true}></AmplifyReduxAuth>
                 <Link variant="nav" href="https://nicholasgriffin.dev">
                   Nicholas Griffin
                 </Link>
               </Flex>
             </header>
-            <BaseMap />
+            <AmplifyReduxAuth>
+              <AWSMap />
+            </AmplifyReduxAuth>
           </div>
         </section>
       </div>

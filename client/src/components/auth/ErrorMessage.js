@@ -1,7 +1,9 @@
 import React from 'react';
 import { isNil, isEmpty } from 'lodash/fp';
 
-const Message = ({ message }) => <span>{message}</span>;
+const Message = ({ message }) => (
+  <span className="error_message">{message}</span>
+);
 
 const ErrorMessage = ({ errorMessage }) => (
   <>

@@ -22,11 +22,10 @@ const LoginForm = ({
     <div className="auth_card">
       <div className="auth_title">
         <Heading fontSize={[6]} color="primary">
-          Welcome back!
+          Start logging your travels today!
         </Heading>
         <p>Enter your credentials below to sign in</p>
       </div>
-      <ErrorMessage errorMessage={error} />
       <form
         className="auth_form"
         onSubmit={(e) => {
@@ -35,6 +34,7 @@ const LoginForm = ({
         }}
       >
         <div className="auth_form_wrap">
+          <ErrorMessage errorMessage={error} />
           <div className="auth_form_input">
             <Label htmlFor="username">Username</Label>
             <Input
@@ -42,6 +42,7 @@ const LoginForm = ({
               id="username"
               name="username"
               label="Username"
+              placeholder="Enter your email address, username or phone number"
               value={inputs.username}
               onChange={handleInputChange}
             />
@@ -54,6 +55,7 @@ const LoginForm = ({
               name="password"
               label="Password"
               type="password"
+              placeholder="Enter your password"
               value={inputs.password}
               onChange={handleInputChange}
             />

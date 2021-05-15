@@ -20,14 +20,24 @@ const mapDispatchProps = (dispatch) => ({
   cleanAuthState: bindActionCreators(cleanAuthState, dispatch),
 });
 
-const NotAuth = (logoText, AuthComponent) =>
-  AuthComponent ? AuthComponent : <Auth logoText={logoText || 'Login'} />;
+const NotAuth = (header, logoText, AuthComponent) =>
+  AuthComponent ? (
+    AuthComponent
+  ) : (
+    <Auth header={header} logoText={logoText || 'Login'} />
+  );
 
-const AmplifyReduxAuth = ({ authState, AuthComponent, children, logoText }) => (
+const AmplifyReduxAuth = ({
+  header,
+  authState,
+  AuthComponent,
+  children,
+  logoText,
+}) => (
   <>
     {authState.loggedIn || authState.checkingAuth
       ? children
-      : NotAuth(logoText, AuthComponent)}
+      : NotAuth(header, logoText, AuthComponent)}
   </>
 );
 
