@@ -25,6 +25,7 @@ class AppInner extends Component {
                 <img src={logo} className="App-logo" alt="logo" />
                 <Box mx="auto" />
                 <AmplifyReduxAuth header={true}></AmplifyReduxAuth>
+                <span>App by: </span>
                 <Link variant="nav" href="https://nicholasgriffin.dev">
                   Nicholas Griffin
                 </Link>

@@ -36,3 +36,8 @@ export const forgotPassword = (username) =>
 
 export const resetPassword = (username, code, newPassword) =>
   action(actionTypes.RESET_PASSWORD, { username, code, newPassword });
+
+export const getCredentials = () => action(actionTypes.GET_CREDENTIALS, {});
+
+export const setCredentials = (credentials) =>
+  action(actionTypes.SET_CREDENTIALS, { credentials });

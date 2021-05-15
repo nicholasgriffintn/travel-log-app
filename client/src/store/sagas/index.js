@@ -8,6 +8,7 @@ import {
   setAuthError,
   setCurrentUser,
   setUserError,
+  setCredentials,
 } from '../actions/session';
 
 const errorMessage = (err) => {
@@ -108,6 +109,21 @@ export function* handleResetPassword(action) {
   }
 }
 
+export function* handleGetCredentials() {
+  try {
+    const credentials = yield apply(Auth, Auth.currentUserCredentials, []);
+
+    if (credentials) {
+      yield put(setCredentials(credentials));
+    }
+  } catch (err) {
+    console.error(err);
+    if (err !== 'cannot get guest credentials when mandatory signin enabled') {
+      yield put(setAuthError(errorMessage(err)));
+    }
+  }
+}
+
 function* watchSearchRequest() {
   yield takeLatest(actionTypes.LOGIN, handleLogin);
   yield takeLatest(actionTypes.LOGOUT, handleLogout);
@@ -116,6 +132,7 @@ function* watchSearchRequest() {
   yield takeLatest(actionTypes.SET_NEW_PASSWORD, handleSetNewPassword);
   yield takeLatest(actionTypes.FORGOT_PASSWORD, handleForgotPassword);
   yield takeLatest(actionTypes.RESET_PASSWORD, handleResetPassword);
+  yield takeLatest(actionTypes.GET_CREDENTIALS, handleGetCredentials);
 }
 
 function* sagas() {

@@ -8,6 +8,7 @@ const initialState = {
   loggedIn: false,
   checkingAuth: false,
   authStatus: 'signIn',
+  credentials: null,
 };
 
 const session = (state = initialState, action) => {
@@ -60,6 +61,18 @@ const session = (state = initialState, action) => {
         checkingAuth: false,
         authStatus: action.payload.status,
         error: undefined,
+      };
+    }
+    case actionTypes.GET_CREDENTIALS: {
+      return {
+        ...state,
+        credentials: null,
+      };
+    }
+    case actionTypes.SET_CREDENTIALS: {
+      return {
+        ...state,
+        credentials: action.payload.credentials,
       };
     }
     default: {

@@ -6,10 +6,15 @@ import ReactMapGL, {
   NavigationControl,
 } from 'react-map-gl';
 
-import { Auth } from 'aws-amplify';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { GET_CREDENTIALS } from '../../store/actions/constants';
+
 import { Signer } from '@aws-amplify/core';
 
 const AWSMap = () => {
+  const dispatch = useDispatch();
+
   /**
    * Sign requests made by Mapbox GL using AWS SigV4.
    */
@@ -34,11 +39,11 @@ const AWSMap = () => {
     return { url: url || '' };
   };
 
-  const [credentials, setCredentials] = React.useState(null);
+  const credentials = useSelector((state) => state.session.credentials);
 
   React.useEffect(() => {
     const fetchCredentials = async () => {
-      setCredentials(await Auth.currentUserCredentials());
+      dispatch({ type: GET_CREDENTIALS });
     };
 
     fetchCredentials();

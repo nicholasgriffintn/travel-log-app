@@ -96,3 +96,7 @@ span.error_message {
   border-radius: 4px;
   color: #fff;
 }
+
+.App-header .App-header-flex span {
+  color: #000;
+}

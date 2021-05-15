@@ -13,6 +13,8 @@ export const CLEAN_AUTH_STATE = 'CLEAN_AUTH_STATE';
 export const SET_AUTH_ERROR = 'SET_AUTH_ERROR';
 export const SET_USER_ERROR = 'SET_USER_ERROR';
 export const LOGOUT = 'LOGOUT';
+export const GET_CREDENTIALS = 'GET_CREDENTIALS';
+export const SET_CREDENTIALS = 'SET_CREDENTIALS';
 
 export default {
   GET_HEALTH,
@@ -29,4 +31,6 @@ export default {
   SET_AUTH_ERROR,
   SET_USER_ERROR,
   LOGOUT,
+  GET_CREDENTIALS,
+  SET_CREDENTIALS,
 };
