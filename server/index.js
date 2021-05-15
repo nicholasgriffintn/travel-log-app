@@ -141,7 +141,7 @@ try {
     res.status(statusCode).send(message);
   });
 
-  const PORT = 5156;
+  const PORT = 80;
 
   app.listen(PORT, () => console.info(`Server running on port ${PORT}`));
 } catch (err) {
