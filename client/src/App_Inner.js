@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 
-import { Box, Flex, Link } from 'rebass';
-
-import logo from './logo.svg';
 import './App.css';
+import BaseMap from './components/map/baseMap';
 import AWSMap from './components/map/awsMap';
+
+import Header from './components/header';
+import Footer from './components/footer';
 
 import AmplifyReduxAuth from './components/auth/Wrapper';
 
@@ -14,26 +15,15 @@ class AppInner extends Component {
       <div className="App-wrap">
         <section className="App-main">
           <div className="App-MapWrap">
-            <header className="App-header">
-              <Flex
-                className="App-header-flex"
-                px={2}
-                color="white"
-                bg="black"
-                alignItems="center"
-              >
-                <img src={logo} className="App-logo" alt="logo" />
-                <Box mx="auto" />
-                <AmplifyReduxAuth header={true}></AmplifyReduxAuth>
-                <span>App by: </span>
-                <Link variant="nav" href="https://nicholasgriffin.dev">
-                  Nicholas Griffin
-                </Link>
-              </Flex>
-            </header>
+            <Header />
             <AmplifyReduxAuth>
-              <AWSMap />
+              {process.env.REACT_APP_USE_AWSMAPS === true ? (
+                <AWSMap />
+              ) : (
+                <BaseMap />
+              )}
             </AmplifyReduxAuth>
+            <Footer />
           </div>
         </section>
       </div>

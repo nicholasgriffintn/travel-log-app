@@ -1,3 +1,11 @@
+html,
+body,
+#root {
+  max-height: 100vh;
+  max-width: 100vw;
+  overflow: hidden;
+}
+
 img.App-logo {
   max-width: 70px;
 }
@@ -99,4 +107,33 @@ span.error_message {
 
 .App-header .App-header-flex span {
   color: #000;
+}
+
+.App-header .App-CurrentUser {
+  background: #fff;
+  margin-right: 10px;
+  border-radius: 4px;
+  padding: 5px 10px;
+}
+
+footer.App-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+footer.App-footer .App-footer-flex {
+  width: 100%;
+  background: #fff;
+  padding: 10px 15px;
+  color: #000;
+}
+
+.App-MapWrap .mapboxgl-ctrl-bottom-right {
+  bottom: 38px !important;
+}
+
+.App-MapWrap .mapboxgl-ctrl-bottom-left {
+  bottom: 38px !important;
 }

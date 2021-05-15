@@ -18,3 +18,4 @@ This is a simple app that uses the AWS Location service and DynamoDB with AWS Co
 - [] Add device tracking for travel history
 - [] Header should show a login button to shows a login modal when you click it
   - [] If logged in the ability to add logs should show
+- [] Add profile view/ edit
