@@ -12,6 +12,8 @@ import { GET_CREDENTIALS } from '../../store/actions/constants';
 
 import { Signer } from '@aws-amplify/core';
 
+import { setLocation } from '../../store/actions/location';
+
 const AWSMap = () => {
   const dispatch = useDispatch();
 
@@ -67,6 +69,13 @@ const AWSMap = () => {
     getEntries();
   }, []);
 
+  const currentLocation = useSelector(
+    (state) => state.location.currentLocation
+  );
+  const locationHistory = useSelector(
+    (state) => state.location.locationHistory
+  );
+
   const showAddMarkerPopup = (event) => {
     const [longitude, latitude] = event.lngLat;
     setAddEntryLocation({
@@ -105,6 +114,10 @@ const AWSMap = () => {
             auto
             onGeolocate={(position) => {
               console.debug('Position changed => ', position);
+              dispatch({
+                type: 'SET_LOCATION',
+                payload: { location: position },
+              });
             }}
           />
           <NavigationControl showCompass={false} style={navControlStyle} />

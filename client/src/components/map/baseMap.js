@@ -6,7 +6,13 @@ import ReactMapGL, {
   NavigationControl,
 } from 'react-map-gl';
 
+import { setLocation } from '../../store/actions/location';
+
+import { useSelector, useDispatch } from 'react-redux';
+
 const BaseMap = () => {
+  const dispatch = useDispatch();
+
   const [logEntries, setLogEntries] = useState([]);
   const [showPopup, setShowPopup] = useState({});
   const [addEntryLocation, setAddEntryLocation] = useState(null);
@@ -24,6 +30,13 @@ const BaseMap = () => {
   useEffect(() => {
     getEntries();
   }, []);
+
+  const currentLocation = useSelector(
+    (state) => state.location.currentLocation
+  );
+  const locationHistory = useSelector(
+    (state) => state.location.locationHistory
+  );
 
   const showAddMarkerPopup = (event) => {
     const [longitude, latitude] = event.lngLat;
@@ -60,6 +73,7 @@ const BaseMap = () => {
         auto
         onGeolocate={(position) => {
           console.debug('Position changed => ', position);
+          dispatch({ type: 'SET_LOCATION', payload: { location: position } });
         }}
       />
       <NavigationControl showCompass={false} style={navControlStyle} />

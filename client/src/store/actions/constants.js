@@ -16,6 +16,8 @@ export const LOGOUT = 'LOGOUT';
 export const GET_CREDENTIALS = 'GET_CREDENTIALS';
 export const SET_CREDENTIALS = 'SET_CREDENTIALS';
 
+export const SET_LOCATION = 'SET_LOCATION';
+
 export default {
   GET_HEALTH,
   LOGIN,
@@ -33,4 +35,5 @@ export default {
   LOGOUT,
   GET_CREDENTIALS,
   SET_CREDENTIALS,
+  SET_LOCATION,
 };
