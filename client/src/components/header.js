@@ -1,12 +1,14 @@
 import React from 'react';
 
-import { Box, Flex, Link } from 'rebass';
+import { Box, Flex, Button } from 'rebass';
 
 import logo from './logo.svg';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Header = () => {
+  const dispatch = useDispatch();
+
   const currentUser = useSelector((state) => state.session.currentUser);
 
   return (
@@ -26,6 +28,14 @@ const Header = () => {
           </div>
         )}
         {console.debug('Current User => ', currentUser)}
+        <Box mx="auto" />
+        <Button
+          className="btn btn-secondary btn-header"
+          type="button"
+          onClick={() => dispatch({ type: 'LOGOUT' })}
+        >
+          LOGOUT
+        </Button>
       </Flex>
     </header>
   );
