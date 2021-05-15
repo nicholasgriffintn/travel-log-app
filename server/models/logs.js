@@ -63,6 +63,7 @@ const logs = dynazord.createModel({
           createdAt: {
             type: Date,
             format: Number,
+            default: new Date().toISOString(),
             validate: {
               isBefore: '2099-12-31T23:59:59.00Z',
               isAfter: '2000-01-01T00:00:00.00Z',
@@ -71,6 +72,7 @@ const logs = dynazord.createModel({
           updatedAt: {
             type: Date,
             format: Number,
+            default: new Date().toISOString(),
             validate: {
               isBefore: '2099-12-31T23:59:59.00Z',
               isAfter: '2000-01-01T00:00:00.00Z',
@@ -134,6 +136,7 @@ const logs = dynazord.createModel({
     publishedAt: {
       type: Date,
       format: Number,
+      default: new Date().toISOString(),
       validate: {
         isBefore: '2099-12-31T23:59:59.00Z',
         isAfter: '2000-01-01T00:00:00.00Z',
@@ -141,7 +144,7 @@ const logs = dynazord.createModel({
     },
     status: {
       type: String,
-      enum: ['PUBLISHED', 'DRAFT', 'SCHEDULED', 'DELETED'],
+      enum: ['PUBLISHED', 'DRAFT', 'SCHEDULED', 'DELETED', 'PRIVATE'],
       default: 'PUBLISHED',
       required: true,
     },

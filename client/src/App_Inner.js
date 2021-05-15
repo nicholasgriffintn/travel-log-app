@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import './App.css';
 import BaseMap from './components/map/baseMap';
 import AWSMap from './components/map/awsMap';
 

@@ -6,9 +6,9 @@ import ReactMapGL, {
   NavigationControl,
 } from 'react-map-gl';
 
-import { setLocation } from '../../store/actions/location';
-
 import { useSelector, useDispatch } from 'react-redux';
+
+import LogEntryForm from './LogEntryForm';
 
 const BaseMap = () => {
   const dispatch = useDispatch();
@@ -71,6 +71,7 @@ const BaseMap = () => {
         positionOptions={{ enableHighAccuracy: true }}
         trackUserLocation={true}
         auto
+        captureScroll={true}
         onGeolocate={(position) => {
           console.debug('Position changed => ', position);
           dispatch({ type: 'SET_LOCATION', payload: { location: position } });
@@ -123,12 +124,24 @@ const BaseMap = () => {
               anchor="top"
             >
               <div className="popup">
-                <h3>{entry.title}</h3>
-                <p>{entry.comments}</p>
+                <div className="popup-header">
+                  <h3>{entry.title}</h3>
+                  <div className="popup-tag">{entry.status}</div>
+                </div>
+                <p>{entry.description}</p>
+                {/* TODO: Add a posted by box */}
+                {entry.images && entry.images.length > 0 && (
+                  <div className="popup-images-gallery">
+                    {entry.images.map((image) => {
+                      <img src={entry.image} alt={entry.title} />;
+                    })}
+                  </div>
+                )}
+                {/* TODO: Add a rating box */}
+                {/* TODO: Add a comments box */}
                 <small>
-                  Visited on: {new Date(entry.visitDate).toLocaleDateString()}
+                  Visited on: {new Date(entry.publishedAt).toLocaleDateString()}
                 </small>
-                {entry.image && <img src={entry.image} alt={entry.title} />}
               </div>
             </Popup>
           ) : null}
@@ -175,13 +188,13 @@ const BaseMap = () => {
             anchor="top"
           >
             <div className="popup">
-              {/* <LogEntryForm
+              <LogEntryForm
                 onClose={() => {
                   setAddEntryLocation(null);
                   getEntries();
                 }}
                 location={addEntryLocation}
-              /> */}
+              />
             </div>
           </Popup>
         </>
