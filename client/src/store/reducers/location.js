@@ -3,6 +3,7 @@ import actionTypes from '../actions/constants';
 const initialState = {
   currentLocation: {},
   locationHistory: [],
+  logEntries: [],
 };
 
 const locationReducer = (state = initialState, action) => {
@@ -21,6 +22,18 @@ const locationReducer = (state = initialState, action) => {
             timestamp: action.payload.location?.timestamp,
           },
         ],
+      };
+    }
+    case actionTypes.GET_LOCATION_LOGS: {
+      return {
+        ...state,
+        logEntries: [],
+      };
+    }
+    case actionTypes.SET_LOCATION_LOGS: {
+      return {
+        ...state,
+        logEntries: action.payload.locationLogs,
       };
     }
     default: {

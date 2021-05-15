@@ -4,14 +4,28 @@ import { useForm } from 'react-hook-form';
 import { Button } from 'rebass';
 import { Label, Input, Textarea, Select } from '@rebass/forms';
 
-export default function LogEntryForm() {
+import { useDispatch } from 'react-redux';
+
+export default function LogEntryForm({ location, onClose }) {
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    dispatch({
+      type: 'CREATE_LOCATION_LOG',
+      payload: {
+        ...data,
+        latitude: location.latitude,
+        longitude: location.longitude,
+      },
+    });
+    onClose();
+  };
 
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */

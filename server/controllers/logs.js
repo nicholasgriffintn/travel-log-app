@@ -20,6 +20,15 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+router.get('/', async (req, res, next) => {
+  try {
+    const entries = await logs.scan({});
+    res.status(200).json(entries);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post('/', limiter, async (req, res, next) => {
   try {
     if (req.get('X-API-KEY') !== process.env.API_KEY) {
@@ -29,18 +38,17 @@ router.post('/', limiter, async (req, res, next) => {
 
     const body = req.body;
 
-    const logEntry = await log.create({
-      userID: body.userID,
-      title: body.title,
-      description: body.description,
-      comments: body.comments,
-      slug: body.slug,
-      images: body.images,
-      rating: body.rating,
-      latitude: body.latitude,
-      longitude: body.longitude,
-      publishedAt: body.publishedAt,
-      status: body.status,
+    const logEntry = await logs.create({
+      userID: body.userID || '',
+      title: body.title || '',
+      description: body.description || '',
+      comments: body.comments || [],
+      slug: body.slug || 'EXAMPLE-SLUG',
+      images: body.images || [],
+      rating: body.rating || 0,
+      latitude: body.latitude || 0,
+      longitude: body.longitude || 0,
+      status: body.status || 'PUBLISHED',
     });
 
     res.status(200).json(logEntry);

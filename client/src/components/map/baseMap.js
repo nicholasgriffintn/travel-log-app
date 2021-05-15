@@ -13,7 +13,22 @@ import LogEntryForm from './LogEntryForm';
 const BaseMap = () => {
   const dispatch = useDispatch();
 
-  const [logEntries, setLogEntries] = useState([]);
+  const currentLocation = useSelector(
+    (state) => state.location.currentLocation
+  );
+  const locationHistory = useSelector(
+    (state) => state.location.locationHistory
+  );
+  const logEntries = useSelector((state) => state.location.logEntries);
+
+  React.useEffect(() => {
+    const fetchEntries = async () => {
+      dispatch({ type: 'GET_LOCATION_LOGS' });
+    };
+
+    fetchEntries();
+  }, []);
+
   const [showPopup, setShowPopup] = useState({});
   const [addEntryLocation, setAddEntryLocation] = useState(null);
   const [viewport, setViewport] = useState({
@@ -21,22 +36,6 @@ const BaseMap = () => {
     longitude: 0.1357,
     zoom: 3,
   });
-
-  const getEntries = async () => {
-    const logEntries = [];
-    setLogEntries(logEntries);
-  };
-
-  useEffect(() => {
-    getEntries();
-  }, []);
-
-  const currentLocation = useSelector(
-    (state) => state.location.currentLocation
-  );
-  const locationHistory = useSelector(
-    (state) => state.location.locationHistory
-  );
 
   const showAddMarkerPopup = (event) => {
     const [longitude, latitude] = event.lngLat;
@@ -79,13 +78,13 @@ const BaseMap = () => {
       />
       <NavigationControl showCompass={false} style={navControlStyle} />
       {logEntries.map((entry) => (
-        <React.Fragment key={entry._id}>
+        <React.Fragment key={entry.id}>
           <Marker latitude={entry.latitude} longitude={entry.longitude}>
             <div
               onClick={() =>
                 setShowPopup({
                   // ...showPopup,
-                  [entry._id]: true,
+                  [entry.id]: true,
                 })
               }
             >
@@ -113,7 +112,7 @@ const BaseMap = () => {
               </svg>
             </div>
           </Marker>
-          {showPopup[entry._id] ? (
+          {showPopup[entry.id] ? (
             <Popup
               latitude={entry.latitude}
               longitude={entry.longitude}

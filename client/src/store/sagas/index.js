@@ -1,6 +1,14 @@
 import { Auth } from 'aws-amplify';
-import { all, fork, put, takeLatest, apply, select } from 'redux-saga/effects';
-import actionTypes from '../actions/constants';
+import {
+  call,
+  all,
+  fork,
+  put,
+  takeLatest,
+  apply,
+  select,
+} from 'redux-saga/effects';
+import actionTypes, { API_URL } from '../actions/constants';
 import {
   setCognitoUser,
   setAuthStatus,
@@ -10,6 +18,7 @@ import {
   setUserError,
   setCredentials,
 } from '../actions/session';
+import { setLocationLogs } from '../actions/location';
 
 const errorMessage = (err) => {
   if (typeof err === 'string') {
@@ -124,6 +133,56 @@ export function* handleGetCredentials() {
   }
 }
 
+export function* handleCreateLocationLog({ payload }) {
+  try {
+    const currentUser = yield apply(Auth, Auth.currentUserInfo, []);
+
+    if (currentUser && currentUser.attributes) {
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...payload,
+          userID: currentUser.attributes.sub,
+        }),
+      };
+      fetch(`${API_URL}/api/logs`, requestOptions)
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+    }
+  } catch (err) {
+    console.error(err);
+    yield put(setAuthError(errorMessage(err)));
+  }
+}
+
+async function fetchJson(url) {
+  let resp;
+  try {
+    let data = await fetch(url);
+    resp = { data: await data.json() };
+  } catch (e) {
+    resp = { err: e.message };
+  }
+  return resp;
+}
+
+export function* handleGetLocationLogs({ payload }) {
+  try {
+    const response = yield call(fetchJson, `${API_URL}/api/logs`);
+    const data = response.data;
+
+    console.log(data);
+
+    yield put(setLocationLogs(data || []));
+  } catch (err) {
+    console.error(err);
+    if (err !== 'cannot get guest credentials when mandatory signin enabled') {
+      yield put(setAuthError(errorMessage(err)));
+    }
+  }
+}
+
 function* watchSearchRequest() {
   yield takeLatest(actionTypes.LOGIN, handleLogin);
   yield takeLatest(actionTypes.LOGOUT, handleLogout);
@@ -133,6 +192,8 @@ function* watchSearchRequest() {
   yield takeLatest(actionTypes.FORGOT_PASSWORD, handleForgotPassword);
   yield takeLatest(actionTypes.RESET_PASSWORD, handleResetPassword);
   yield takeLatest(actionTypes.GET_CREDENTIALS, handleGetCredentials);
+  yield takeLatest(actionTypes.CREATE_LOCATION_LOG, handleCreateLocationLog);
+  yield takeLatest(actionTypes.GET_LOCATION_LOGS, handleGetLocationLogs);
 }
 
 function* sagas() {

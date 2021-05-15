@@ -1,10 +1,14 @@
 const _kebabCase = require('lodash/kebabCase');
 const assert = require('http-assert');
+const AWS = require('aws-sdk');
 const dynazord = require('dynazord');
 const isUUID = require('validator/lib/isUUID');
 const { v4: uuid } = require('uuid');
 
+const dynamodb = new AWS.DynamoDB({ region: 'eu-west-1' });
+
 const logs = dynazord.createModel({
+  dynamodb,
   tableName: 'travel-logs',
   keySchema: {
     hash: 'id',
@@ -40,107 +44,75 @@ const logs = dynazord.createModel({
     },
     description: {
       type: String,
+      required: false,
     },
     comments: {
       type: Array,
       required: false,
       properties: {
         type: Object,
-        required: true,
+        required: false,
         properties: {
           author: {
             type: String,
-            validate: {
-              notEmpty: true,
-            },
+            required: false,
           },
           comment: {
             type: String,
-            validate: {
-              notEmpty: true,
-            },
+            required: false,
           },
           createdAt: {
-            type: Date,
-            format: Number,
+            type: String,
             default: new Date().toISOString(),
-            validate: {
-              isBefore: '2099-12-31T23:59:59.00Z',
-              isAfter: '2000-01-01T00:00:00.00Z',
-            },
           },
           updatedAt: {
-            type: Date,
-            format: Number,
+            type: String,
             default: new Date().toISOString(),
-            validate: {
-              isBefore: '2099-12-31T23:59:59.00Z',
-              isAfter: '2000-01-01T00:00:00.00Z',
-            },
           },
-        },
-        validate: {
-          notEmpty: true,
         },
       },
     },
     slug: {
       type: String,
-      required: true,
+      required: false,
       default: () => 'EXAMPLE-SLUG',
-      validate: {
-        notNull: true,
-        notEmpty: true,
-      },
     },
     images: {
       type: Array,
-      required: true,
+      required: false,
       properties: {
         type: Object,
-        required: true,
+        required: false,
         properties: {
           name: {
             type: String,
-            validate: {
-              notEmpty: true,
-            },
+            required: false,
           },
           url: {
             type: String,
-            validate: {
-              notEmpty: true,
-            },
+            required: false,
           },
         },
-        validate: {
-          notEmpty: true,
-        },
-      },
-      validate: {
-        notEmpty: true,
       },
     },
     rating: {
       type: Number,
+      required: false,
       default: 0,
     },
     latitude: {
       type: Number,
+      required: true,
       default: 0,
     },
     longitude: {
       type: Number,
+      required: true,
       default: 0,
     },
     publishedAt: {
-      type: Date,
-      format: Number,
-      default: new Date().toISOString(),
-      validate: {
-        isBefore: '2099-12-31T23:59:59.00Z',
-        isAfter: '2000-01-01T00:00:00.00Z',
-      },
+      type: String,
+      default: new Date().toDateString(),
     },
     status: {
       type: String,

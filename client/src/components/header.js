@@ -28,14 +28,18 @@ const Header = () => {
           </div>
         )}
         {console.debug('Current User => ', currentUser)}
-        <Box mx="auto" />
-        <Button
-          className="btn btn-secondary btn-header"
-          type="button"
-          onClick={() => dispatch({ type: 'LOGOUT' })}
-        >
-          LOGOUT
-        </Button>
+        {currentUser && currentUser.attributes && (
+          <>
+            <Box mx="auto" />
+            <Button
+              className="btn btn-secondary btn-header"
+              type="button"
+              onClick={() => dispatch({ type: 'LOGOUT' })}
+            >
+              LOGOUT
+            </Button>
+          </>
+        )}
       </Flex>
     </header>
   );
