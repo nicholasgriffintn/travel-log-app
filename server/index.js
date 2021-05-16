@@ -1,150 +1,91 @@
-try {
-  const express = require('express');
+/* eslint-disable no-console */
+const dotenv = require('dotenv');
+const cluster = require('cluster');
+const numCores = require('os').cpus().length;
+const app = require('./app');
 
-  const cors = require('cors');
-  const cookieParser = require('cookie-parser');
-  const compression = require('compression');
-  const helmet = require('helmet');
-  const hpp = require('hpp');
-  const morgan = require('morgan');
+// Handle uncaught exceptions
+process.on('uncaughtException', (uncaughtExc) => {
+  console.error('uncaughtException Err::', uncaughtExc);
+  console.error('uncaughtException Stack::', JSON.stringify(uncaughtExc.stack));
+  process.exit(1);
+});
 
-  const app = express();
+const workers = [];
+const setupWorkerProcesses = () => {
+  console.info(`Master cluster setting up ${numCores} workers`);
 
-  // Add trust proxy
-  app.set('trust proxy', 1);
+  for (let i = 0; i < numCores; i++) {
+    workers.push(cluster.fork());
 
-  // Disable powered by
-  app.disable('x-powered-by');
+    workers[i].on('message', function (message) {
+      console.info(message);
+    });
+  }
 
-  // Add default headers
-  app.use((req, res, next) => {
-    res.setHeader(
-      'Access-Control-Allow-Origin',
-      req.header && req.header('Origin') ? req.header('Origin') : '*'
-    );
-    res.setHeader(
-      'Access-Control-Allow-Methods',
-      'GET, POST, PUT, PATCH, DELETE, OPTIONS'
-    );
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      'X-Requested-With,content-type,authorization,type,Origin,Content-Type,Accept,Authorization,Access-Control-Allow-Credentials,sentry-trace,X-Api-Version'
-    );
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader(
-      'Permissions-Policy',
-      `accelerometer, camera, geolocation, gyroscope, magnetometer, microphone, payment, usb`
-    );
-    res.setHeader('referrer-policy', 'strict-origin-when-cross-origin');
-    res.setHeader('x-content-type-options', 'nosniff');
-
-    res.setHeader('X-Server', `Server-${process.env.NODE_ENV}`);
-    res.setHeader('X-Server-Process', process.pid);
-
-    next();
+  cluster.on('online', function (worker) {
+    console.info(`Worker ${worker.process.pid} is listening`);
   });
 
-  // Enables Helmet, a set of tools to
-  // increase security.
-  let cspSrc = ["'self'", '*.localhost:5000'];
-  app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: {
-          defaultSrc: cspSrc,
-          reportUri: `/api/csp/report`,
-        },
-        reportOnly: true,
-      },
-    })
-  );
+  cluster.on('exit', function (worker, code, signal) {
+    console.error(
+      `Worker ${worker.process.pid} died with code: ${code}, and signal: ${signal}`
+    );
+    console.info('Starting a new worker');
+    cluster.fork();
+    workers.push(cluster.fork());
+    workers[workers.length - 1].on('message', function (message) {
+      console.info(message);
+    });
+  });
+};
 
-  // Parses cookies
-  app.use(cookieParser());
+const setUpExpress = () => {
+  dotenv.config({ path: '.env' });
 
-  // Prevent HTTP parameter pollution
-  app.use(hpp());
+  const port = process.env.APP_PORT || 8000;
 
-  // Allows for the parsing of JSON and forms
-  app.use(
-    express.json({
-      limit: '50mb',
-    })
-  );
-  app.use(
-    express.urlencoded({
-      limit: '50mb',
-      extended: true,
-    })
-  );
-
-  // to support x-ndjson
-  app.use(
-    express.text({
-      limit: '50mb',
-      type: 'application/x-ndjson',
-    })
-  );
-
-  // Compresses the response
-  app.use(compression());
-
-  // Request logging
-  app.use(morgan('tiny'));
-
-  // Create the default API route
-  const defaultRoute = express.Router();
-
-  // Redirect the root path
-  defaultRoute.get('/', (req, res, next) => {
-    res.redirect('/health');
+  const server = app.listen(port, () => {
+    console.info(`App running on port ${port}...`);
   });
 
-  // Post API for CSP reports
-  defaultRoute.post(`/csp/report`, (req, res) => {
-    if (req.body && req.body['csp-report']) {
-      logger.warn(`CSP header violation`, req.body[`csp-report`]);
-      res.status(204).end();
-    } else {
-      res.status(204).end();
-    }
+  // In case of an error
+  app.on('error', (appErr, appCtx) => {
+    console.error('app error', appErr.stack);
+    console.error('on url', appCtx.req.url);
+    console.error('with headers', appCtx.req.headers);
   });
 
-  defaultRoute.get('/health', cors(), (req, res) => {
-    res.status(200).json({
-      status: 'OK',
-      message: 'All is well',
+  // Handle unhandled promise rejections
+  process.on('unhandledRejection', (err) => {
+    console.error('UNHANDLED REJECTION! 💥 Shutting down...');
+    console.error(err.name, err.message);
+    server.close(() => {
+      process.exit(1);
     });
   });
 
-  // Controller for logs
-  const logs = require('./controllers/logs');
-
-  defaultRoute.use('/logs', logs);
-
-  // Add the default route to the /api endpoint
-  app.use('/api', defaultRoute);
-
-  // Default route handeler
-  app.get('*', (req, res, next) => {
-    const error = new Error(`${req.ip} tried to access ${req.originalUrl}`);
-
-    error.statusCode = 404;
-
-    next(error);
+  process.on('SIGTERM', () => {
+    console.info('👋 SIGTERM RECEIVED. Shutting down gracefully');
+    server.close(() => {
+      console.info('💥 Process terminated!');
+    });
   });
+};
 
-  // Error handeler
-  app.use((err, req, res, next) => {
-    const { statusCode = 500, message = 'Internal Server Error' } = err;
+// Setup server either with clustering or without it
+const setupServer = (isClusterRequired) => {
+  // If it is a master process then call setting up worker process
+  if (isClusterRequired && cluster.isMaster) {
+    setupWorkerProcesses();
+  } else {
+    // Setup server configurations and share port address for incoming requests
+    setUpExpress();
+  }
+};
 
-    res.status(statusCode).send(message);
-  });
-
-  const PORT = process.env.PORT || 8000;
-  app.listen(PORT, () => {
-    console.log(`Our app is running on port ${PORT}`);
-  });
-} catch (err) {
-  console.error(err);
+if (process.env.NODE_ENV === 'production') {
+  setupServer(true);
+} else {
+  setupServer(false);
 }
