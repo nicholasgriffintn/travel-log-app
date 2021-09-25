@@ -21,7 +21,7 @@
         "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
         "dotenv": "^9.0.2",
-        "dynazord": "^1.1.0",
+        "dynazord": "^1.2.1",
         "express": "^4.17.1",
         "express-rate-limit": "^5.2.6",
         "helmet": "^4.6.0",
