@@ -26,7 +26,7 @@
         "express-rate-limit": "^5.3.0",
         "helmet": "^4.6.0",
         "hpp": "^0.2.3",
-        "http-assert": "^1.4.1",
+        "http-assert": "^1.5.0",
         "morgan": "^1.10.0",
         "uuid": "^8.3.2",
         "validator": "^13.6.0"
