@@ -474,10 +474,10 @@ duplexer3@^0.1.4:
   resolved "https://registry.yarnpkg.com/duplexer3/-/duplexer3-0.1.4.tgz#ee01dd1cac0ed3cbc7fdbea37dc0a8f1ce002ce2"
   integrity sha1-7gHdHKwO08vH/b6jfcCo8c4ALOI=
 
-dynazord@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/dynazord/-/dynazord-1.1.0.tgz#d0700e3412c75f0dd9659b15422d5fce73042fb0"
-  integrity sha512-WaDptAR+WMSzoEJ7fX9tbs9lthj/N3yvMV/7cmGBMypCtu8n6lVeZ8bOVKHQagh7IOieiUuFltuPnySmU687FA==
+dynazord@^1.2.1:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/dynazord/-/dynazord-1.2.2.tgz#cd874582c9483c9ca376adc4036e354e55292c58"
+  integrity sha512-Hir1ULPVXDOX4FamFTI7r+k7/nZiFFrXppOJ/UHTOqwak/JAa+ep1TUzIBvyCnxFDq4kshpPhBYIAiOadcXYRg==
   dependencies:
     aws-sdk "^2.802.0"
 
