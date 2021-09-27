@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.4.0",
+    "@emotion/react": "^11.4.1",
     "@rebass/forms": "^4.0.6",
     "@rebass/preset": "^4.0.5",
     "aws-amplify": "^4.2.6",
